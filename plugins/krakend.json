@@ -1,0 +1,34 @@
+{
+    "version": 3,
+    "name": "Laravel API Gateway",
+    "port": 8080,
+    "timeout": "3000ms",
+    "plugin": {
+        "folder": "./plugins/",
+        "pattern": ".so"
+    },
+    "extra_config": {
+    },
+    "endpoints": [
+        {
+            "endpoint": "/api/<name>",
+            "method": "GET",
+            "output_encoding": "json",
+            "input_headers": ["*"],
+            "input_query_strings": ["*"],
+            "backend": [
+                {
+                    "host": ["http://host.docker.internal:8000"],
+                    "url_pattern": "/api/<name>/",
+                    "extra_config": {
+                        "plugin/http-client": {
+                            "name": "redis-cache",
+                            "table_name": "<table_name>",
+                            "key_type": "paginate/single"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

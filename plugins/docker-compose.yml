@@ -1,0 +1,18 @@
+services:
+    krakend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        container_name: krakend_gateway_ms_cache
+        restart: unless-stopped
+#        env_file:
+#            - .env
+        environment:
+            - APP_SERVICE=ms-cache
+            - REDIS_ADDR=host.docker.internal:6379
+            - REDIS_TTL=300
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+

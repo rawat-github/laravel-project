@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+
+class {{ class }} extends BaseController
+{
+
+    #[OA\Get(
+             path: '',
+             operationId: '',
+             description: '',
+             summary: '',
+             tags: [''],
+             responses: [
+                 new OA\Response(
+                     response: Response::HTTP_OK,
+                     description: 'success',
+                     content: new OA\JsonContent(
+                         properties: [
+                             new OA\Property(property: 'success', type: 'boolean', example: true),
+                             new OA\Property(property: 'message', type: 'string', example: 'success'),
+                             new OA\Property(property: 'data',
+                                 type: 'array',
+                                 example: [],
+                                 items: new OA\Items()),
+                         ]
+                     )
+                 ),
+             ]
+         )]
+        public function getFunction(): JsonResponse
+        {
+        }
+}

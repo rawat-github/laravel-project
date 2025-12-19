@@ -1,0 +1,203 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+use {{ rootNamespace }}Services\{{ model }}Service;
+use {{ namespacedRequests }}
+use Illuminate\Http\JsonResponse;
+use OpenApi\Attributes as OA;
+use Illuminate\Http\Response;
+use ValueResearch\Scaffold\Support\HttpResponse;
+use ValueResearch\Scaffold\Controllers\BaseController;
+
+class {{ class }} extends BaseController
+{
+    protected {{ model }}Service $service;
+
+    public function __construct({{ model }}Service $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+     #[OA\Get(
+         path: '',
+         operationId: '',
+         description: '',
+         summary: '',
+         tags: [''],
+         responses: [
+             new OA\Response(
+                 response: Response::HTTP_OK,
+                 description: 'success',
+                 content: new OA\JsonContent(
+                     properties: [
+                         new OA\Property(property: 'success', type: 'boolean', example: true),
+                         new OA\Property(property: 'message', type: 'string', example: 'success'),
+                         new OA\Property(property: 'data',
+                             type: 'array',
+                             items: new OA\Items(),
+                             example: []),
+                     ]
+                 )
+             ),
+         ]
+     )]
+    public function index(): JsonResponse
+    {
+        return HttpResponse::fromBaseResponse($this->service->paginate());
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+     #[OA\Post(
+          path: '',
+          operationId: '',
+          description: '',
+          summary: '',
+          requestBody: new OA\RequestBody(
+              required: true,
+              content: new OA\JsonContent(
+                  properties: [
+
+                  ]
+              )
+          ),
+          tags: [''],
+          responses: [
+              new OA\Response(
+                  response: Response::HTTP_OK,
+                  description: 'success',
+                  content: new OA\JsonContent(
+                      properties: [
+                          new OA\Property(property: 'success', type: 'boolean', example: true),
+                          new OA\Property(property: 'message', type: 'string', example: 'success'),
+                          new OA\Property(property: 'data',
+                              type: 'array',
+                              items: new OA\Items(),
+                              example: []),
+                      ]
+                  )
+              ),
+          ]
+     )]
+    public function store(Store{{ model }}Request $request): JsonResponse
+    {
+        return HttpResponse::fromBaseResponse($this->service->create($request->all()));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+     #[OA\Get(
+         path: '',
+         operationId: '',
+         description: '',
+         summary: '',
+         tags: [''],
+         parameters: [
+             new OA\Parameter(
+                 name: '',
+                 description: '',
+                 in: 'query',
+                 required: true,
+                 schema: new OA\Schema(
+                     type: 'integer',
+                 )
+             )
+         ],
+         responses: [
+             new OA\Response(
+                 response: Response::HTTP_OK,
+                 description: 'success',
+                 content: new OA\JsonContent(
+                     properties: [
+                         new OA\Property(property: 'success', type: 'boolean', example: true),
+                         new OA\Property(property: 'message', type: 'string', example: 'success'),
+                         new OA\Property(property: 'data',
+                             type: 'array',
+                             items: new OA\Items(),
+                             example: []),
+                     ]
+                 )
+             ),
+         ]
+     )]
+    public function show(int $id): JsonResponse
+    {
+        $conditionData = ['id' => $id];
+        return HttpResponse::fromBaseResponse($this->service->findByCondition($conditionData));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Update{{ model }}Request $request, int $id): JsonResponse
+    {
+        return HttpResponse::fromBaseResponse($this->service->updateOnCondition(['id' => $id], $request->all()));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $conditionData = ['id' => $id];
+        return HttpResponse::fromBaseResponse($this->service->deleteOnCondition($conditionData));
+    }
+
+
+      /**
+       * Filter the resource with specified values
+       */
+
+      #[OA\Get(
+          path: '',
+          operationId: '',
+          description: '',
+          summary: '',
+          tags: [''],
+          parameters: [
+              new OA\Parameter(
+                  name: '',
+                  description: '',
+                  in: 'query',
+                  required: true,
+                  schema: new OA\Schema(
+                      type: 'string',
+                  )
+              )
+          ],
+          responses: [
+              new OA\Response(
+                  response: Response::HTTP_OK,
+                  description: 'success',
+                  content: new OA\JsonContent(
+                      properties: [
+                          new OA\Property(property: 'success', type: 'boolean', example: true),
+                          new OA\Property(property: 'message', type: 'string', example: 'success'),
+                          new OA\Property(property: 'data',
+                              type: 'array',
+                              example: [],
+                              items: new OA\Items()),
+                      ]
+                  )
+              ),
+          ]
+      )]
+
+
+    public function filter(string $requestHash): JsonResponse
+    {
+       return HttpResponse::fromBaseResponse($this->service->getFilteredRecords($requestHash));
+    }
+
+    public function filterCustom(string $requestJson): JsonResponse
+    {
+        return HttpResponse::fromBaseResponse($this->service->getFilteredRecordsUrl($requestJson));
+    }
+}
