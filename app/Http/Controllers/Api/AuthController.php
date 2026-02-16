@@ -65,7 +65,7 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
 
@@ -77,7 +77,14 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-
+//        👉 ADMIN CHECK
+        if ($user->role !== 'user') {
+            Auth::logout();
+            return response()->json([
+                'success' => false,
+                'message' => 'Only admin is allowed to login'
+            ], Response::HTTP_FORBIDDEN);
+        }
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
@@ -85,5 +92,7 @@ class AuthController extends Controller
                 'token' => $user->createToken('api-token')->plainTextToken
             ]
         ], Response::HTTP_OK);
+
+
     }
 }
