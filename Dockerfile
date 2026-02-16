@@ -4,12 +4,15 @@ FROM php:8.3-apache
 # Set working directory
 WORKDIR /var/www/html
 
-# Install system dependencies and PostgreSQL PHP extension
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql \
+    libzip-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath ctype xml zip \
     && a2enmod rewrite
 
 # Copy project files
@@ -19,10 +22,7 @@ COPY . /var/www/html
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Generate Laravel key (optional, can also use env variable)
-# RUN php artisan key:generate
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-dev --optimize-autoloader
 
 # Set permissions for Laravel folders
 RUN chown -R www-data:www-data /var/www/html \
@@ -31,5 +31,5 @@ RUN chown -R www-data:www-data /var/www/html \
 # Expose port 80
 EXPOSE 80
 
-# Start Apache in foreground
+# Start Apache
 CMD ["apache2-foreground"]
