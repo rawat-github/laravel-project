@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use ValueResearch\Scaffold\Controllers\BaseController;
 
@@ -52,7 +53,7 @@ return response()->json([
 *     path="/api/tasks",
 *     operationId="createTask",
 *     description="Create a new task for the authenticated user",
-*     summary="Create task",l
+*     summary="Create task",
 *     tags={"Tasks"},
 *     security={{"sanctum": {}}},
 *     requestBody={
@@ -89,8 +90,6 @@ return response()->json([
 */
 public function store(Request $request): JsonResponse
 {
-    print_r("Dfsfs");
-    die;
     $validated = $request->validate([
         'title' => 'required|string|max:255',
         'description' => 'required|string',

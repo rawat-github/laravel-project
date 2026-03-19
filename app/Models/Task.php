@@ -2,16 +2,33 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-use ValueResearch\Scaffold\Models\BaseModel;
-
-class Task extends BaseModel
+class Task extends Model
 {
-    // TODO: add a array of identifiers so the previous record with same data gets deleted on new insert
+    use SoftDeletes;
+
     public array $duplicateIdentifier = [];
 
-    // TODO: add columns here which can be added/modified by API
-    protected $fillable = [];
+    protected $fillable = [
+        'title', 'description', 'deadline', 'status',
+        'priority', 'due_date', 'category_id', 'completed_at', 'user_id',
+    ];
 
-    //
+    protected $casts = [
+        'due_date'     => 'date',
+        'completed_at' => 'datetime',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

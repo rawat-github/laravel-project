@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — TaskFlow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+
+<div class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-2xl mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Create your account</h1>
+        <p class="text-gray-500 mt-1">Start organizing your tasks today</p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <form method="POST" action="{{ route('register.submit') }}" x-data="{ loading: false }" @submit="loading = true">
+            @csrf
+
+            <!-- Name -->
+            <div class="mb-5">
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">Full name</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus
+                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow
+                                  @error('name') border-red-400 focus:ring-red-500 focus:border-red-500 @enderror"
+                       placeholder="John Doe">
+                @error('name')
+                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Email -->
+            <div class="mb-5">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+                <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow
+                                  @error('email') border-red-400 focus:ring-red-500 focus:border-red-500 @enderror"
+                       placeholder="you@example.com">
+                @error('email')
+                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Password -->
+            <div class="mb-5" x-data="{ showPass: false }">
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+                <div class="relative">
+                    <input :type="showPass ? 'text' : 'password'" id="password" name="password" required
+                           class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow pr-10
+                                      @error('password') border-red-400 focus:ring-red-500 focus:border-red-500 @enderror"
+                           placeholder="Minimum 8 characters">
+                    <button type="button" @click="showPass = !showPass" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <svg x-show="!showPass" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        <svg x-show="showPass" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                        </svg>
+                    </button>
+                </div>
+                @error('password')
+                <p class="mt-1.5 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-6">
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" required
+                       class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"
+                       placeholder="••••••••">
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" :disabled="loading"
+                    class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
+                <svg x-show="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" style="display:none">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                <span x-text="loading ? 'Creating account...' : 'Create account'">Create account</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Login Link -->
+    <p class="text-center text-sm text-gray-500 mt-6">
+        Already have an account?
+        <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-700 font-medium">Sign in</a>
+    </p>
+</div>
+
+</body>
+</html>
